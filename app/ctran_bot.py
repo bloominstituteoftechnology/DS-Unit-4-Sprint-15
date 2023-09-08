@@ -7,11 +7,8 @@ from ctransformers import AutoModelForCausalLM
 
 
 def generate_story(user_prompt: str):
-    system_prompt = "You are a masterful storyteller. You will be given a " \
-                    "prompt, please respond with a short story based on the " \
-                    "prompt. Do not discuss the story or explain anything. " \
-                    "Your response should be the story text by itself in " \
-                    "simple markdown."
+    system_prompt = "You are a masterful storyteller. Please respond with a " \
+                    "short story based on the following prompt."
     prompt = f"### Instruction: {system_prompt}\n\n" \
              f"{user_prompt}\n\n" \
              f"### Response:\n"
@@ -20,10 +17,7 @@ def generate_story(user_prompt: str):
         model_type="llama",
         context_length=4096,
         max_new_tokens=4000,
-        # temperature=0.8,
-        # top_k=40,
-        # top_p=0.95,
-        # repetition_penalty=1.1,
+        temperature=0.5,
     )
     reply = llm(prompt)
     return reply

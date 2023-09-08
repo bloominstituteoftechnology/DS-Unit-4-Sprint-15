@@ -7,11 +7,8 @@ from llama_cpp import Llama
 
 
 def generate_story(user_prompt: str):
-    system_prompt = "You are a masterful storyteller. You will be given a " \
-                    "prompt, please respond with a short story based on the " \
-                    "prompt. Do not discuss the story or explain anything. " \
-                    "Your response should be the story text by itself in " \
-                    "simple markdown."
+    system_prompt = "You are a masterful storyteller. Please respond with a " \
+                    "short story based on the following prompt."
     prompt = f"### Instruction: {system_prompt}\n\n" \
              f"{user_prompt}\n\n" \
              f"### Response:\n"
@@ -23,12 +20,7 @@ def generate_story(user_prompt: str):
         prompt,
         stop=["###"],
         max_tokens=-1,
-        # temperature=1.0,
-        # top_k=100,
-        # top_p=1.0,
-        # presence_penalty=0.0,
-        # frequency_penalty=0.0,
-        # echo=False,
+        temperature=0.5,
     )
     reply = raw_output.get("choices")[0].get("text").strip()
     return reply
