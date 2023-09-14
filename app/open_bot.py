@@ -28,7 +28,7 @@ def generate_story(user_prompt: str):
         max_tokens=None,
         temperature=0.5,
     )
-    reply = raw_output.choices[0].message["content"].strip()
+    reply = raw_output.choices[0].message.content.strip()
     return reply
 
 

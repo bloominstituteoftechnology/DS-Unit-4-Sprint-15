@@ -31,6 +31,6 @@ if __name__ == '__main__':
     from datetime import timedelta
 
     start = perf_counter()
-    print(sarcasm_bot("Tell me a fantasy story about the adventures of a hamster"))
+    print(sarcasm_bot("Tell me a fantasy short story about the adventures of a hamster"))
     stop = perf_counter()
     print(f"\nTotal Time: {timedelta(seconds=stop - start)}")
