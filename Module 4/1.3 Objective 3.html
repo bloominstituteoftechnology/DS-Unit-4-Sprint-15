@@ -1,21 +1,5 @@
 <h1>Local LLM setup</h1>
 
-<h2>Outline</h2>
-
-<ol>
-<li>Install Dependencies</li>
-<li>Importing the Library: Imports the Llama class from the llama_cpp package. </li>
-<li>Defining Prompts:
-<ul>
-<li>system<em>prompt sets the persona of the chatbot.</li>
-<li>user</em>prompt contains a user's query or statement.</li>
-<li>prompt is the full prompt to be passed to the LLM, including the instruction and the user's input. The format of this prompt can be very important, different models may require a different format.</li>
-</ul></li>
-<li>Initialize LLM: Initializes the local language model by providing the path to the model in Llama(model_path=...). </li>
-<li>Generate Response: Calls the LLM with the prompt, along with various parameters like stop, max<em>tokens, and temperature. It saves the output to raw</em>output. </li>
-<li>Extract and Print Reply: Extracts the generated reply from the raw_output and prints it.</li>
-</ol>
-
 <h3>Install Dependencies</h3>
 
 <pre><code>pip install llama-cpp-python
