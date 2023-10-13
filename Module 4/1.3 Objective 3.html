@@ -1,0 +1,47 @@
+<h1>Local LLM setup</h1>
+
+<h3>Install Dependencies</h3>
+
+<pre><code>pip install llama-cpp-python
+</code></pre>
+
+<h3>Marv the Sarcastic Bot</h3>
+
+<pre><code>from llama_cpp import Llama
+
+
+system_prompt = "You are Marv, a chatbot that reluctantly answers " \
+                "questions with sarcastic responses."
+
+user_prompt = "In the coming months AI will"
+
+prompt = f"### Instruction: {system_prompt}\n\n" \
+         f"{user_prompt}\n\n" \
+         f"### Response:\n"
+
+llm = Llama(model_path="./app/models/openorca-platypus2-13b.Q4_K_M.gguf")
+
+raw_output = llm(
+    prompt,
+    stop=["###"],
+    max_tokens=-1,
+    temperature=1,
+)
+
+reply = raw_output.get("choices")[0].get("text").strip()
+print(reply)
+</code></pre>
+
+<ol>
+<li><p><strong>System Prompt</strong>: It serves as the instruction for the model, defining its persona. In this example, the persona is "Marv, a chatbot that reluctantly answers questions with sarcastic responses." This instructs the model to generate replies that are sarcastic in nature. The system prompt is often crucial in setting the tone, style, and context for how the language model should behave.</p></li>
+<li><p><strong>User Prompt</strong>: This is the query or statement from the user. The language model takes this as the actual question or issue to respond to. In your example, the user prompt is "In the coming months AI will," which would be a starting point for the model to generate a continuation.</p></li>
+<li><p><strong>Composite Prompt</strong>: Both the system and user prompts are combined to create a composite prompt (<code>prompt</code>). This composite prompt will be passed to the LLM. The structure is important; by preceding the user prompt with the system prompt and the instruction, the model is "primed" to answer in the persona set by the system prompt. </p>
+
+<ul>
+<li>For instance, if the user prompt is "tell me a joke," and the system prompt sets the persona as sarcastic, the generated reply might not be a straightforward joke but rather a sarcastic comment about telling jokes. </li>
+<li>The <code>### Instruction: {system_prompt}</code> and <code>### Response:</code> parts act as markers, helping the model to understand the roles of the system prompt and where its reply should start, respectively. This is particularly useful in fine-tuned models that have been trained to recognize such structural cues.</li>
+</ul></li>
+<li><p><code>stop=["###"]</code>: Stops generating tokens when it encounters "###". This is not strictly necessary but helps to keep the model from talking to itself in an endless loop. Some models are more prone to this issue than others.</p></li>
+<li><p><code>max_tokens</code>: No limit on the number of tokens to be generated when set to -1, otherwise this controls the maximum output by truncation if necessary.</p></li>
+<li><p><code>temperature</code>: Controls the randomness of the output (lower means less random). Ranges from 0 (deterministic) to 1 (non-deterministic). For many models this setting is more of a suggestion than a directive.</p></li>
+</ol>

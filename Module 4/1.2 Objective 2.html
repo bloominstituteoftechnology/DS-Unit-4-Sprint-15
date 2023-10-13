@@ -1,0 +1,165 @@
+<h2>OpenAI API SDK</h2>
+
+<h3>Introduction</h3>
+
+<p>The OpenAI API SDK serves as a powerful tool for leveraging machine learning capabilities within your applications. By manipulating parameters such as <code>prompt</code>, <code>max_tokens</code>, <code>temperature</code>, and <code>top_p</code>, users can fine-tune the output to meet their specific needs. Whether you are aiming for more deterministic results or embracing randomness, understanding these options enables you to exploit the full potential of the API.</p>
+
+<h3><code>prompt</code></h3>
+
+<p>The <code>prompt</code> parameter is the initial string that guides the model in generating a completion. The more specific and contextual the prompt, the more accurate the generated text will be.</p>
+
+<h3><code>max_tokens</code></h3>
+
+<p>This parameter limits the number of tokens in the output. If you set <code>max_tokens</code> to 50, the model will generate text up to 50 tokens long.</p>
+
+<h3><code>temperature</code></h3>
+
+<p>The <code>temperature</code> parameter controls the randomness of the output. A higher value like 0.8 yields more random outputs, while a lower value like 0.2 makes the output more deterministic.</p>
+
+<h3><code>top_p</code></h3>
+
+<p>This parameter controls the nucleus sampling, which filters the token pool before choosing the next token. Values are between 0 and 1; lower values make the text more focused and deterministic.</p>
+
+<h2>Handling SDK Responses</h2>
+
+<h3>Response Object</h3>
+
+<p>When you make an API call using the SDK, you receive a response object. This object contains various pieces of information, including the generated text.</p>
+
+<p>To extract the generated text from the response object, you can use the following code snippet:</p>
+
+<pre><code>import openai
+
+response = openai.Completion.create(
+    engine="text-davinci-002",
+    prompt="Translate the following English text to French: '{}'",
+    max_tokens=60
+)
+
+generated_text = response.choices[0].message.content.strip()
+</code></pre>
+
+<p>As a function...</p>
+
+<pre><code>import openai
+
+def extract_reply(response):
+    return response.choices[0].message.content.strip()
+
+
+response = openai.Completion.create(
+    engine="text-davinci-002",
+    prompt="Translate the following English text to French: '{}'",
+    max_tokens=60
+)
+
+generated_text = extract_reply(response)
+</code></pre>
+
+<h2>Error Handling</h2>
+
+<p>To handle errors gracefully, you can use Python's try-except blocks. Here's an example:</p>
+
+<pre><code>import openai
+
+try:
+    response = openai.Completion.create(
+        engine="text-davinci-002",
+        prompt="Translate the following English text to French: '{}'",
+        max_tokens=60
+    )
+    print(response)
+except openai.OpenAIError as e:
+    print(f"An error occurred: {e}")
+
+</code></pre>
+
+<p>You may need to account for more common errors; errors you might find in any API. Here is the short list of those errors you may encounter:</p>
+
+<ul>
+<li><code>RateLimitExceeded</code>: You've exceeded the number of requests permitted in a given time frame.</li>
+<li><code>ResourceNotFound</code>: The engine specified does not exist.</li>
+<li><code>InvalidRequestError</code>: The API request was malformed.</li>
+</ul>
+
+<h2>Advanced SDK Usage</h2>
+
+<h3>Batching Requests</h3>
+
+<p>To make multiple requests at once, you can use the SDK's batch support. This is more efficient than making individual calls.</p>
+
+<h3>Pagination</h3>
+
+<p>When dealing with a large amount of generated text, you can paginate the results. This helps in managing the tokens effectively.</p>
+
+<h2>Deep Dive: System Prompts in OpenAI's GPT API with Python SDK</h2>
+
+<p>System prompts are special instructions given to the model to guide its behavior throughout an interactive session or for a specific task. These are often used in conversational agents, content filters, and other scenarios where you need to condition the model's responses according to specific guidelines or goals.</p>
+
+<h3>Types of System Prompts</h3>
+
+<h4>Conversational Directives</h4>
+
+<p>You can use system prompts to instruct the model to behave like a specific character or to adopt a particular tone, style, or point of view. For example, instructing the model to speak like Shakespeare or to adopt a formal tone.</p>
+
+<h4>Content Filtering</h4>
+
+<p>System prompts can also be used to enforce ethical guidelines, like avoiding generating harmful or inappropriate content.</p>
+
+<h4>Task-Specific Instructions</h4>
+
+<p>For specialized tasks like code generation, data analysis, or text summarization, system prompts can provide high-level directives that guide the model's behavior throughout the session.</p>
+
+<h3>Format of System Prompts</h3>
+
+<p>The system prompt is generally set up at the beginning of an interaction and stays consistent throughout. It's often placed at the top of the prompt string, separate from user or task-specific prompts, to provide a general context or instruction set for the model.</p>
+
+<h3>Implementing System Prompts with SDK</h3>
+
+<p>Here's how you can include a system prompt while generating text using the chat interface:</p>
+
+<pre><code>import openai
+
+
+def extract_reply(response):
+    return response.choices[0].text.strip()
+
+messages=[
+    {"role": "system", "content": "You are an assistant that speaks like Shakespeare."},
+    {"role": "user", "content": "How is the weather today?"}
+],
+
+result = openai.ChatCompletion.create(
+    model="gpt-3.5-turbo",
+    messages=messages,
+)
+
+reply = extract_reply(result)
+print(reply)
+</code></pre>
+
+<h3>Considerations for Using System Prompts</h3>
+
+<ul>
+<li><p><strong>Token Limit</strong>: Remember that system prompts consume tokens, so be mindful of the <code>max_tokens</code> parameter to ensure the output is not truncated.</p></li>
+<li><p><strong>Prompt Clarity</strong>: The clearer and more specific your system prompt, the better the model will be at following the guidelines or rules you've set.</p></li>
+<li><p><strong>Testing</strong>: It's crucial to test the effectiveness of a system prompt rigorously to ensure it guides the model's behavior as intended.</p></li>
+</ul>
+
+<p>By mastering the use of system prompts, you can make the most out of OpenAI's GPT API and Python SDK for a wide array of specialized and interactive tasks.</p>
+
+<h2>Conclusion</h2>
+
+<p>In this module, we delved into the OpenAI Python SDK as a powerful tool for interacting with GPT models. Starting from the basic setup requirements and installation, we progressed through the various parameters like <code>prompt</code>, <code>max_tokens</code>, <code>temperature</code>, and <code>top_p</code> that help fine-tune the behavior and output of the GPT model. </p>
+
+<p>We also took a deep dive into the concept of system prompts, a versatile feature that allows you to guide the model's behavior for specialized tasks, enforce ethical guidelines, or add a conversational context. Whether you're building a conversational agent, a content filter, or a specialized text generator, understanding how to effectively utilize system prompts can be a game-changer.</p>
+
+<p>As you move forward, remember that the key to effectively using the API and SDK lies in your understanding of these parameters and features. Each project may require a different combination of them, so it's important to experiment and find what works best for your specific needs.</p>
+
+<p>With this foundation, you are well-prepared to explore more advanced topics and applications in future modules.</p>
+
+<h2>Additional Resources</h2>
+
+<ul>
+<li><a href="https://platform.openai.com/docs/api-reference">OpenAI API Reference</a></li>
+</ul>
